@@ -1,17 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ElectricityMeter
 {
@@ -185,7 +177,7 @@ namespace ElectricityMeter
             int count = 0, count2 = 1;
             for (int i = 0; i < buttonList.Count; i++)
             {
-                buttonList[i].Content = (Convert.ToInt32(textBoxList[count].Text) + Convert.ToInt32(textBoxList[count2].Text)) * 5.11;
+                buttonList[i].Content = (Convert.ToInt32(textBoxList[count].Text) * 2.86) + (Convert.ToInt32(textBoxList[count2].Text) * 7.36);
                 count += 2;
                 count2 += 2;
             }
@@ -214,7 +206,7 @@ namespace ElectricityMeter
         }
         private void UniformGrid_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            var element = e.OriginalSource as UIElement;
+            var element = e.OriginalSource as UIElement;    
             MessageBox.Show(element.ToString());
             
         }
