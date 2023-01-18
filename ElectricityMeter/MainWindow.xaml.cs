@@ -54,7 +54,7 @@ namespace ElectricityMeter
         private void ElectricityMeter_Loaded(object sender, RoutedEventArgs e)
         {
             int num = 0, count = 0;
-
+            
             for (int i = 0; i < ElectricityMeter.Rows; i++)
             {
                 for (int j = 0; j < ElectricityMeter.Columns; j++)
@@ -168,7 +168,7 @@ namespace ElectricityMeter
                     else
                     {
                         textBoxInputData = new TextBox();
-                        textBoxInputData.Text = "0";
+                        textBoxInputData.Text = "1";
                         textBoxInputData.Padding = new Thickness(8);
                         textBoxInputData.TextAlignment = TextAlignment.Center;
                         textBoxInputData.FontSize = 17;
@@ -212,6 +212,13 @@ namespace ElectricityMeter
                 MessageBox.Show("Неверный ввод (толко целые числа)!");
             }
         }
+        private void UniformGrid_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var element = e.OriginalSource as UIElement;
+            MessageBox.Show(element.ToString());
+            
+        }
+           
     }
 }
     

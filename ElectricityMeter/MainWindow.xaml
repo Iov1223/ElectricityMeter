@@ -9,7 +9,7 @@
         PreviewMouseDown="buttonResult_Clic">
     <UniformGrid x:Name="ElectricityMeter" Loaded="ElectricityMeter_Loaded"
         PreviewTextInput="ElectricityMeter_PreviewTextInput"
-        PreviewMouseDown="buttonSum_Clic">
+        PreviewMouseDown="buttonSum_Clic" MouseDown="UniformGrid_MouseDown">
         
     </UniformGrid>
 </Window>
