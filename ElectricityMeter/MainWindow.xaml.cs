@@ -20,6 +20,8 @@ namespace ElectricityMeter
     /// </summary>
     public partial class MainWindow : Window
     {
+        private List<Button> buttonList;
+        private List<TextBox> textBoxList;
         private string[] monthArr;
         private Label labelMonth;
         private Label labelNight;
@@ -30,6 +32,8 @@ namespace ElectricityMeter
         private TextBlock textBlockTotal;
         private Button buttonSum;
         private TextBox textBoxInputData;
+        private TextBlock textBlockEmpty;
+        private BrushConverter bc;
         public MainWindow()
         {
             InitializeComponent();
@@ -42,11 +46,14 @@ namespace ElectricityMeter
                 "Июль", "Август", "Сентябрь",
                 "Октябрь", "Ноябрь", "Декабрь"
             };
+            buttonList = new List<Button>();
+            textBoxList = new List<TextBox>();
+            bc = new BrushConverter();
         }
 
         private void ElectricityMeter_Loaded(object sender, RoutedEventArgs e)
         {
-            int num = 0;
+            int num = 0, count = 0;
 
             for (int i = 0; i < ElectricityMeter.Rows; i++)
             {
@@ -75,7 +82,7 @@ namespace ElectricityMeter
                         labelNight.BorderThickness = new Thickness(0.5);
                         labelNight.HorizontalContentAlignment = HorizontalAlignment.Center;
                         ElectricityMeter.Children.Add(labelNight);
-                        
+
                     }
                     else if (i == 0 && j == 2)
                     {
@@ -88,7 +95,7 @@ namespace ElectricityMeter
                         labelDay.BorderThickness = new Thickness(0.5);
                         labelDay.HorizontalContentAlignment = HorizontalAlignment.Center;
                         ElectricityMeter.Children.Add(labelDay);
-                        
+
                     }
                     else if (i == 0 && j == 3)
                     {
@@ -115,7 +122,7 @@ namespace ElectricityMeter
                         ElectricityMeter.Children.Add(labelMonthName);
                         num++;
                     }
-                    else if (j == 3 && i != 0)
+                    else if (j == 3 && i != 0 && i != 13)
                     {
                         buttonResult = new Button();
                         buttonResult.BorderBrush = Brushes.Black;
@@ -124,13 +131,27 @@ namespace ElectricityMeter
                         buttonResult.FontWeight = FontWeights.Bold;
                         buttonResult.Padding = new Thickness(8);
                         buttonResult.Content = "Посчитать";
+                        buttonResult.Background = (Brush)bc.ConvertFrom("#FFFC73");
                         buttonResult.HorizontalContentAlignment = HorizontalAlignment.Center;
                         ElectricityMeter.Children.Add(buttonResult);
+                        buttonList.Add(buttonResult);
                     }
-                    else if (i == 13 && j== 0)
+                    else if (i == 13 && j == 0)
+                    {
+                        textBlockEmpty = new TextBlock();
+                        textBlockEmpty.Text = "";
+                        ElectricityMeter.Children.Add(textBlockEmpty);
+                    }
+                    else if (i == 13 && j == 3)
                     {
                         textBlockTotal = new TextBlock();
-                        textBlockTotal.Text = "";
+                        textBlockTotal.Text = "длывдл";
+                        textBlockTotal.FontSize = 17;
+                        textBlockTotal.FontWeight = FontWeights.Bold;
+                        textBlockTotal.Padding = new Thickness(8);
+                        textBlockTotal.Background = (Brush)bc.ConvertFrom("#A967D5");
+                        textBlockTotal.Foreground = Brushes.White;
+                        textBlockTotal.TextAlignment = TextAlignment.Center;
                         ElectricityMeter.Children.Add(textBlockTotal);
                     }
                     else if (i == 13 && j == 1)
@@ -140,34 +161,58 @@ namespace ElectricityMeter
                         buttonSum.FontWeight = FontWeights.Bold;
                         buttonSum.Content = "Итого";
                         buttonSum.BorderBrush = Brushes.Black;
-                        buttonSum.Background = Brushes.DodgerBlue;
-                        buttonSum.Foreground = Brushes.White;  
+                        buttonSum.Background = (Brush)bc.ConvertFrom("#6C8AD5");
+                        buttonSum.Foreground = Brushes.White;
                         ElectricityMeter.Children.Add(buttonSum);
                     }
-                    else 
+                    else
                     {
                         textBoxInputData = new TextBox();
-                        textBoxInputData.Text = "2";
+                        textBoxInputData.Text = "0";
                         textBoxInputData.Padding = new Thickness(8);
                         textBoxInputData.TextAlignment = TextAlignment.Center;
                         textBoxInputData.FontSize = 17;
                         textBoxInputData.FontWeight = FontWeights.Bold;
                         textBoxInputData.BorderBrush = Brushes.Black;
                         ElectricityMeter.Children.Add(textBoxInputData);
+                        textBoxList.Add(textBoxInputData);
                     }
                 }
             }
         }
         private void buttonResult_Clic(object sender, RoutedEventArgs e)
         {
-            if (textBoxInputData.Text != null)
+            int count = 0, count2 = 1;
+            for (int i = 0; i < buttonList.Count; i++)
             {
-                buttonResult.Content = Convert.ToInt32(textBoxInputData.Text) + Convert.ToInt32(textBoxInputData.Text);
+                buttonList[i].Content = (Convert.ToInt32(textBoxList[count].Text) + Convert.ToInt32(textBoxList[count2].Text)) * 5.11;
+                count += 2;
+                count2 += 2;
             }
-            else
+
+        }
+        private void buttonSum_Clic(object sender, RoutedEventArgs e)
+        {
+            double sum = 0;
+            for (int i = 0; i < buttonList.Count; i++)
             {
-                MessageBox.Show("Ничего нет");
+                if (buttonList[i].Content != "Посчитать")
+                {
+                    sum += Convert.ToDouble(buttonList[i].Content);
+                }
+            }
+            textBlockTotal.Text = sum.ToString();
+        }
+        
+        private void ElectricityMeter_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (!Char.IsDigit(e.Text, 0))
+            {
+                e.Handled = true;
+                MessageBox.Show("Неверный ввод (толко целые числа)!");
             }
         }
     }
 }
+    
+
